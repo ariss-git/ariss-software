@@ -45,6 +45,9 @@ export class PanelUserClass {
       where: {
         role: panel_user_type.ADMIN,
       },
+      orderBy: {
+        created_at: "desc",
+      },
     });
   }
 
@@ -53,6 +56,9 @@ export class PanelUserClass {
     return await this.prismaClient.panel_user.findMany({
       where: {
         role: panel_user_type.EMPLOYEE,
+      },
+      orderBy: {
+        created_at: "desc",
       },
     });
   }

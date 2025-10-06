@@ -1,10 +1,7 @@
-const Navbar = () => {
+export default function Navbar() {
   return (
-    <div className="flex justify-between items-center w-full lg:h-20 bg-white fixed top-0 right-0 px-6">
-      <h1 className="lg:ml-64">Navbar</h1>
-      <h1>Navbar</h1>
-    </div>
+    <header className="fixed top-0 left-64 right-0 h-16 bg-white border-b lg:flex hidden items-center px-6 z-10">
+      <h1 className="text-lg font-semibold">Navbar</h1>
+    </header>
   );
-};
-
-export default Navbar;
+}
