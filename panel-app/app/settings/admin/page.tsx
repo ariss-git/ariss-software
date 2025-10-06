@@ -31,7 +31,7 @@ const FetchAllAdmins = () => {
   const [adminData, setAdminData] = useState<Admin[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const filteredData = adminData.filter(
     (admin) =>
