@@ -1,6 +1,16 @@
 "use client";
 
 import { fetchAllAdmins } from "@/app/_api/panel-user";
+import Navbar from "@/app/_components/Navbar";
+import { Badge } from "@/components/ui/badge";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
   Pagination,
   PaginationContent,
@@ -16,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface Admin {
@@ -62,75 +73,110 @@ const FetchAllAdmins = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center w-full flex-col lg:gap-y-10">
-      <input
-        placeholder="Search admins..."
-        value={searchQuery}
-        onChange={(e) => {
-          setSearchQuery(e.target.value);
-          setCurrentPage(1);
-        }}
-        className="lg:placeholder:text-sm placeholder:text-xs pl-2 focus:outline-none focus:ring-0"
-      />
-      <Table>
-        <TableHeader>
-          <TableRow className="font-bold">
-            <TableCell>Profile</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Role</TableCell>
-            <TableCell>Joined Date</TableCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {paginatedData.map((admin, idx) => (
-            <TableRow
-              key={admin.panel_user_id}
-              className={idx % 2 === 0 ? "bg-white" : "bg-neutral-100"}
-            >
-              <TableCell>{admin.profile_picture}</TableCell>
-              <TableCell>{admin.fullname}</TableCell>
-              <TableCell>{admin.email}</TableCell>
-              <TableCell>{admin.role}</TableCell>
-              <TableCell>{admin.created_at.split("T")[0]}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <>
+      <Navbar>
+        <BreadcrumbNav />
+      </Navbar>
+      <div className="flex justify-center items-center w-full flex-col lg:gap-y-10 lg:mt-10">
+        <div className="flex justify-between items-center w-full lg:px-4 lg:py-4 shadow rounded-md border">
+          <h1 className="lg:text-xl font-semibold capitalize">Admin Members</h1>
 
-      {paginatedData.length !== 0 && (
-        <Pagination className="mt-6">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                className="cursor-pointer"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                // disabled={currentPage === 1}
-              />
-            </PaginationItem>
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <PaginationItem key={index}>
-                <PaginationLink
-                  isActive={currentPage === index + 1}
-                  onClick={() => setCurrentPage(index + 1)}
-                >
-                  {index + 1}
-                </PaginationLink>
-              </PaginationItem>
+          <input
+            placeholder="Search admins..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="lg:placeholder:text-sm placeholder:text-xs pl-2 focus:outline-none focus:ring-0"
+          />
+        </div>
+        <Table>
+          <TableHeader>
+            <TableRow className="font-bold">
+              <TableCell>Profile</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Joined Date</TableCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {paginatedData.map((admin, idx) => (
+              <TableRow
+                key={admin.panel_user_id}
+                className={idx % 2 === 0 ? "bg-white" : "bg-neutral-100"}
+              >
+                <TableCell>{admin.profile_picture}</TableCell>
+                <TableCell>{admin.fullname}</TableCell>
+                <TableCell>{admin.email}</TableCell>
+                <TableCell>{admin.role}</TableCell>
+                <TableCell>{admin.created_at.split("T")[0]}</TableCell>
+              </TableRow>
             ))}
-            <PaginationItem>
-              <PaginationNext
-                className="cursor-pointer"
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                // disabled={currentPage === totalPages}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      )}
-    </div>
+          </TableBody>
+        </Table>
+
+        {paginatedData.length !== 0 && (
+          <Pagination className="mt-6">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  // disabled={currentPage === 1}
+                />
+              </PaginationItem>
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <PaginationItem key={index}>
+                  <PaginationLink
+                    isActive={currentPage === index + 1}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              <PaginationItem>
+                <PaginationNext
+                  className="cursor-pointer"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  // disabled={currentPage === totalPages}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
+      </div>
+    </>
+  );
+};
+
+const BreadcrumbNav = () => {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link href="/">Dashboard</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link href="/settings">Settings</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Admin</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 };
 
