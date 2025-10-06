@@ -31,10 +31,13 @@ const FetchAllAdmins = () => {
   const [adminData, setAdminData] = useState<Admin[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
-  const filteredData = adminData.filter((admin) =>
-    admin.fullname.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredData = adminData.filter(
+    (admin) =>
+      admin.fullname.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      admin.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      admin.role.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const paginatedData = filteredData.slice(
