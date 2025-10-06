@@ -3,6 +3,6 @@ import panelUserRouter from "./panel-user.route";
 
 const mainRouter = Router();
 
-panelUserRouter.use("/panel-user");
+mainRouter.use("/panel-user", panelUserRouter);
 
 export default mainRouter;
