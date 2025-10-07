@@ -2,7 +2,6 @@
 
 import { fetchAllAdmins } from "@/app/_api/panel-user";
 import Navbar from "@/app/_components/Navbar";
-import { Badge } from "@/components/ui/badge";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -20,6 +19,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -62,18 +62,29 @@ const FetchAllAdmins = () => {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const getAllAdmins = async () => {
+    setLoading(true);
     try {
       const response = await fetchAllAdmins();
       console.log(response.data.data);
       setAdminData(response.data.data);
     } catch (error) {
       console.error("Error fetching admin", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getAllAdmins();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center w-full min-h-screen">
+        <Spinner className="size-8" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -95,8 +106,12 @@ const FetchAllAdmins = () => {
             <Search className="w-4 h-4 text-muted-foreground" />
           </div>
           <div className="flex justify-start items-center lg:gap-x-4">
-            <Button>Add Admin</Button>
-            <Button variant="outline">Filter</Button>
+            <Button
+              variant="outline"
+              className="flex items-center justify-center gap-x-2"
+            >
+              Filter <ChevronDown className="stroke-[1] w-4 h-4" />
+            </Button>
           </div>
         </div>
         <Table>
@@ -109,22 +124,35 @@ const FetchAllAdmins = () => {
               <TableCell>Joined Date</TableCell>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            {paginatedData.map((admin, idx) => (
-              <TableRow
-                key={admin.panel_user_id}
-                className={
-                  idx % 2 === 0 ? "bg-white border" : "bg-neutral-100 border"
-                }
-              >
-                <TableCell>{admin.profile_picture}</TableCell>
-                <TableCell>{admin.fullname}</TableCell>
-                <TableCell>{admin.email}</TableCell>
-                <TableCell>{admin.role}</TableCell>
-                <TableCell>{admin.created_at.split("T")[0]}</TableCell>
+          {paginatedData.length === 0 ? (
+            <TableBody>
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="text-center align-middle lg:h-20 text-muted-foreground"
+                >
+                  No admin found.
+                </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
+            </TableBody>
+          ) : (
+            <TableBody>
+              {paginatedData.map((admin, idx) => (
+                <TableRow
+                  key={admin.panel_user_id}
+                  className={
+                    idx % 2 === 0 ? "bg-white border" : "bg-neutral-100 border"
+                  }
+                >
+                  <TableCell>{admin.profile_picture}</TableCell>
+                  <TableCell>{admin.fullname}</TableCell>
+                  <TableCell>{admin.email}</TableCell>
+                  <TableCell>{admin.role}</TableCell>
+                  <TableCell>{admin.created_at.split("T")[0]}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
 
         {paginatedData.length !== 0 && (
@@ -181,7 +209,9 @@ const BreadcrumbNav = () => {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage>Admin</BreadcrumbPage>
+          <BreadcrumbPage className="cursor-default">
+            Admin Members
+          </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
