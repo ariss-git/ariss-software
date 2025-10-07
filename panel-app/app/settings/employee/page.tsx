@@ -1,6 +1,6 @@
 "use client";
 
-import { fetchAllAdmins } from "@/app/_api/panel-user";
+import { fetchAllEmployees } from "@/app/_api/panel-user";
 import Navbar from "@/app/_components/Navbar";
 import {
   Breadcrumb,
@@ -37,7 +37,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-interface Admin {
+interface Employee {
   panel_user_id: string;
   email: string;
   fullname: string;
@@ -46,8 +46,8 @@ interface Admin {
   created_at: string;
 }
 
-const FetchAllAdmins = () => {
-  const [adminData, setAdminData] = useState<Admin[]>([]);
+const FetchAllEmployees = () => {
+  const [adminData, setAdminData] = useState<Employee[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -70,12 +70,12 @@ const FetchAllAdmins = () => {
   const getAllAdmins = async () => {
     setLoading(true);
     try {
-      const response = await fetchAllAdmins();
+      const response = await fetchAllEmployees();
       console.log(response.data.data);
       setAdminData(response.data.data);
     } catch (error) {
-      console.error("Error fetching admin", error);
-      toast.error("Error Fetching Admin.", {
+      console.error("Error fetching employee", error);
+      toast.error("Error Fetching Employee.", {
         description: "Server might be down, please contact the developer.",
         style: { backgroundColor: "red" },
       });
@@ -102,10 +102,10 @@ const FetchAllAdmins = () => {
         <BreadcrumbNav />
       </Navbar>
       <div className="flex justify-center items-center w-full flex-col lg:gap-y-10 lg:mt-10">
-        <div className="flex justify-between items-center w-full lg:px-4 lg:py-4 shadow rounded-md border">
+        <div className="flex justify-between items-center w-full lg:px-4 lg:py-4 shadow rounded-md">
           <div className="flex justify-start items-center lg:px-2 lg:py-1 bg-neutral-100 rounded">
             <input
-              placeholder="Search an admin..."
+              placeholder="Search an employee..."
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -126,7 +126,7 @@ const FetchAllAdmins = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="lg:pl-2 lg:pr-6 py-2 text-xs flex justify-start items-start">
-                <Link href="/settings/employee">Employee Members</Link>
+                <Link href="/settings/admin">Admin Members</Link>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -148,7 +148,7 @@ const FetchAllAdmins = () => {
                   colSpan={5}
                   className="text-center align-middle lg:h-20 text-muted-foreground"
                 >
-                  No admin members found.
+                  No employee members found.
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -231,7 +231,7 @@ const BreadcrumbNav = () => {
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbPage className="cursor-default">
-            Admin Members
+            Employee Members
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
@@ -239,4 +239,4 @@ const BreadcrumbNav = () => {
   );
 };
 
-export default FetchAllAdmins;
+export default FetchAllEmployees;
