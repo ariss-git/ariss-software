@@ -11,6 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -26,6 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -42,7 +44,8 @@ const FetchAllAdmins = () => {
   const [adminData, setAdminData] = useState<Admin[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [loading, setLoading] = useState(false);
+  const itemsPerPage = 7;
 
   const filteredData = adminData.filter(
     (admin) =>
@@ -79,21 +82,26 @@ const FetchAllAdmins = () => {
       </Navbar>
       <div className="flex justify-center items-center w-full flex-col lg:gap-y-10 lg:mt-10">
         <div className="flex justify-between items-center w-full lg:px-4 lg:py-4 shadow rounded-md border">
-          <h1 className="lg:text-xl font-semibold capitalize">Admin Members</h1>
-
-          <input
-            placeholder="Search admins..."
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="lg:placeholder:text-sm placeholder:text-xs pl-2 focus:outline-none focus:ring-0"
-          />
+          <div className="flex justify-start items-center lg:px-2 lg:py-1 bg-neutral-100 rounded">
+            <input
+              placeholder="Search an admin..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="lg:placeholder:text-sm placeholder:text-xs pl-2 focus:outline-none bg-transparent focus:ring-0 lg:w-[220px]"
+            />
+            <Search className="w-4 h-4 text-muted-foreground" />
+          </div>
+          <div className="flex justify-start items-center lg:gap-x-4">
+            <Button>Add Admin</Button>
+            <Button variant="outline">Filter</Button>
+          </div>
         </div>
         <Table>
           <TableHeader>
-            <TableRow className="font-bold">
+            <TableRow className="font-semibold">
               <TableCell>Profile</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
@@ -105,7 +113,9 @@ const FetchAllAdmins = () => {
             {paginatedData.map((admin, idx) => (
               <TableRow
                 key={admin.panel_user_id}
-                className={idx % 2 === 0 ? "bg-white" : "bg-neutral-100"}
+                className={
+                  idx % 2 === 0 ? "bg-white border" : "bg-neutral-100 border"
+                }
               >
                 <TableCell>{admin.profile_picture}</TableCell>
                 <TableCell>{admin.fullname}</TableCell>
@@ -118,7 +128,7 @@ const FetchAllAdmins = () => {
         </Table>
 
         {paginatedData.length !== 0 && (
-          <Pagination className="mt-6">
+          <Pagination className="absolute bottom-4 mt-2">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
@@ -126,7 +136,6 @@ const FetchAllAdmins = () => {
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
-                  // disabled={currentPage === 1}
                 />
               </PaginationItem>
               {Array.from({ length: totalPages }).map((_, index) => (
@@ -145,7 +154,6 @@ const FetchAllAdmins = () => {
                   onClick={() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
-                  // disabled={currentPage === totalPages}
                 />
               </PaginationItem>
             </PaginationContent>
