@@ -30,6 +30,7 @@ import {
 import { ChevronDown, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface Admin {
   panel_user_id: string;
@@ -69,6 +70,10 @@ const FetchAllAdmins = () => {
       setAdminData(response.data.data);
     } catch (error) {
       console.error("Error fetching admin", error);
+      toast.error("Error fetching admin", {
+        description: "Server might be down, please contact the developer.",
+        style: { backgroundColor: "red" },
+      });
     } finally {
       setLoading(false);
     }
