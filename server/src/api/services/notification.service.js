@@ -41,7 +41,7 @@ export class NotificationService {
     });
   }
 
-  async readNotificatin(id) {
+  async readNotification(id) {
     const existingNotification = await prisma.notification.findUnique({
       where: {
         id,
