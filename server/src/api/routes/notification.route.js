@@ -21,4 +21,9 @@ notificationRouter.patch(
   notificationControllers.readNotificationController
 );
 
+notificationRouter.delete(
+  "/delete/all",
+  notificationControllers.deleteAllNotificationsController
+);
+
 export default notificationRouter;

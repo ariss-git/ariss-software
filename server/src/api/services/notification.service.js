@@ -2,14 +2,6 @@ import prisma from "../../lib/orm.js";
 import { v4 as uuid } from "uuid";
 
 export const createNotification = async (title, description, author) => {
-  const existingNotification = await prisma.notification.findUnique({
-    where: {
-      id,
-    },
-  });
-
-  if (existingNotification) throw new Error("Notification already exist");
-
   return await prisma.notification.create({
     data: {
       id: `notification-${uuid()}`,
@@ -58,5 +50,9 @@ export class NotificationService {
         is_read: true,
       },
     });
+  }
+
+  async deleteAllNotification() {
+    return await prisma.notification.deleteMany();
   }
 }

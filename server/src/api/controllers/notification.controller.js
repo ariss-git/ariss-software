@@ -53,3 +53,14 @@ export const readNotificationController = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+export const deleteAllNotificationsController = async (_req, res) => {
+  try {
+    const notification = await notificationServices.deleteAllNotification();
+    res.status(200).json({ total: notification.length, data: notification });
+    console.log("All notifications deleted");
+  } catch (error) {
+    console.log("Error deleting all notifications");
+    res.status(500).json({ message: error.message });
+  }
+};
