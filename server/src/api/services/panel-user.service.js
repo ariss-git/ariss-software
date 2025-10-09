@@ -15,7 +15,7 @@ export class PanelUserService {
 
     const panelUser = await prisma.panelUser.create({
       data: {
-        id: `${role}-${uuid()}`,
+        id: `${role.toLowerCase()}-${uuid()}`,
         clerk_id: clerkId,
         email,
         fullname,
