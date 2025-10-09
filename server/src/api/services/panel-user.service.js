@@ -24,12 +24,12 @@ export class PanelUserService {
       },
     });
 
-    createNotification(
+    await createNotification(
       "Panel User",
       `New ${
         panelUser.fullname
       } ${panelUser.role.toLowerCase()} has been registered to panel`,
-      ""
+      null
     );
 
     return panelUser;
