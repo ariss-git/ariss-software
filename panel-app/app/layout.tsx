@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Sidebar from "./_components/Sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "ARISS - Dashboard",
@@ -17,14 +18,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`font-work antialiased flex h-screen overflow-hidden`}>
-        <Sidebar />
-        <main className="flex-1 lg:overflow-y-auto lg:p-6 lg:ml-60">
-          {children}
-        </main>
-        <Toaster />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`font-work antialiased flex h-screen overflow-hidden`}>
+          <Sidebar />
+          <main className="flex-1 lg:overflow-y-auto lg:p-6 lg:ml-60">
+            {children}
+          </main>
+          <Toaster />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
