@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("LOCAL_DATABASE_URL")
+}
+
+model PanelUser {
+  id         String        @id
+  clerk_id   String        @unique
+  email      String        @unique
+  fullname   String
+  role       PanelUserType
+  created_at DateTime      @default(now())
+}
+
+model Notification {
+  id          String   @id
+  title       String
+  description String
+  author      String?
+  created_at  DateTime @default(now())
+}
+
+enum PanelUserType {
+  ADMIN
+  EMPLOYEE
+}
