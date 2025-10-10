@@ -18,16 +18,8 @@ export class BusinessOwnerService {
   ) {
     const existing = await prisma.customer.findUnique({
       where: {
-        OR: [
-          {
-            email,
-            role: CustomerType.DEALER,
-          },
-          {
-            phone,
-            role: CustomerType.DEALER,
-          },
-        ],
+        email,
+        role: CustomerType.DEALER,
       },
     });
 

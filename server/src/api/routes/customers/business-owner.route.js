@@ -15,10 +15,13 @@ ownerRouter.get(
 );
 
 ownerRouter.put(
-  "/change-address",
+  "/change-address/:email",
   businessOwnerControllers.updateOwnerAddressController
 );
 
-ownerRouter.delete("/opt", businessOwnerControllers.deleteOwnerController);
+ownerRouter.delete(
+  "/remove/:email",
+  businessOwnerControllers.deleteOwnerController
+);
 
 export default ownerRouter;

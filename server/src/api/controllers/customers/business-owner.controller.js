@@ -43,8 +43,7 @@ export const registerOwnerController = async (req, res) => {
       .status(201)
       .json({ message: "Business account has been registered", data: owner });
   } catch (error) {
-    res.status(400);
-    throw new Error("There was an error adding user", error.message);
+    res.status(400).json({ message: error.message });
   }
 };
 
