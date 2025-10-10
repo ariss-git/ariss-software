@@ -11,6 +11,7 @@ export const registerOwnerController = async (req, res) => {
     business,
     shippingAddress,
     billingAddress,
+    otp,
   } = req.body;
 
   if (
@@ -34,7 +35,8 @@ export const registerOwnerController = async (req, res) => {
       gstin,
       business,
       shippingAddress,
-      billingAddress
+      billingAddress,
+      otp
     );
 
     res

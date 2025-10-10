@@ -13,7 +13,8 @@ export class BusinessOwnerService {
     gstin,
     business,
     shippingAddress,
-    billingAddress
+    billingAddress,
+    otp
   ) {
     const existing = await prisma.customer.findUnique({
       where: {
