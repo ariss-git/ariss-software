@@ -19,7 +19,6 @@ export class BusinessOwnerService {
     const existing = await prisma.customer.findUnique({
       where: {
         email,
-        role: CustomerType.DEALER,
       },
     });
 
@@ -103,11 +102,21 @@ export class BusinessOwnerService {
   }
 
   async deleteOwner(email) {
-    return await prisma.customer.delete({
+    const owner = await prisma.customer.delete({
       where: {
         email,
         role: CustomerType.DEALER,
       },
     });
+
+    await createNotification(
+      "Dealer left",
+      `New ${owner.business} has deleted their account`,
+      null
+    );
+
+    // TODO: Create email notification
+
+    return owner;
   }
 }

@@ -10,3 +10,14 @@ export const waitForApproval = async (email) => {
 
   await emailTransporter.sendMail(mailOptions);
 };
+
+export const waitForApprovalEmployee = async (email) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Your Account is Under Review",
+    text: "Please wait while your account gets approved by your business owner.",
+  };
+
+  await emailTransporter.sendMail(mailOptions);
+};
