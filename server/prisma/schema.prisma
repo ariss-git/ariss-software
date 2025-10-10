@@ -25,6 +25,31 @@ model Notification {
   created_at  DateTime @default(now())
 }
 
+model Customer {
+  id               String       @id
+  email            String       @unique
+  phone            String       @unique
+  name             String
+  profile_picture  String?
+  role             CustomerType
+  is_approved      Boolean      @default(false)
+  gstin            String?
+  business         String?
+  shipping_address Json?
+  billing_address  Json?
+  created_at       DateTime     @default(now())
+
+  dealer_id   String?
+  dealer_user Customer?  @relation("DealerUser", fields: [dealer_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  dealer      Customer[] @relation("DealerUser")
+}
+
+enum CustomerType {
+  DEALER
+  TECHNICIAN
+  BACKOFFICE
+}
+
 enum PanelUserType {
   ADMIN
   EMPLOYEE
