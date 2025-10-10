@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import redisClient from "../../utils/redis-client.js";
 import emailTransporter from "../../utils/email-transporter.js";
+import prisma from "../../lib/orm.js";
 
 export const generateOTP = () => crypto.randomInt(100000, 999999).toString();
 
@@ -16,13 +16,27 @@ export const sendOTP = async (email, otp) => {
 };
 
 export const storeOTP = async (email, otp) => {
-  await redisClient.setEx(`otp:${email}`, OTP_EXPIRATION, otp);
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+
+  // upsert ensures only one OTP per email
+  await prisma.oTP.upsert({
+    where: { email },
+    update: { code: otp, expires_at: expiresAt },
+    create: { email, code: otp, expires_at: expiresAt },
+  });
 };
 
 export const verifyOTP = async (email, otp) => {
-  const storedOTP = await redisClient.get(`otp:${email}`);
-  if (!storedOTP || storedOTP !== otp) return false;
+  const record = await prisma.oTP.findUnique({ where: { email } });
+  if (!record) return false;
 
-  await redisClient.del(`otp:${email}`);
+  const expired = record.expires_at < new Date();
+  if (expired || record.code !== otp) return false;
+
+  await prisma.oTP.delete({ where: { email } });
   return true;
+};
+
+export const wipeOTP = async () => {
+  return await prisma.oTP.deleteMany();
 };

@@ -44,6 +44,14 @@ model Customer {
   dealer      Customer[] @relation("DealerUser")
 }
 
+model OTP {
+  id         String   @id @default(nanoid())
+  email      String   @unique
+  code       String
+  expires_at DateTime
+  created_at DateTime @default(now())
+}
+
 enum CustomerType {
   DEALER
   TECHNICIAN

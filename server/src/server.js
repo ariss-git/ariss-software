@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mainRouter from "./api/routes/index.route.js";
-import _redisClient from "./utils/redis-client.js";
 
 dotenv.config();
 const PORT = 5000;
