@@ -30,6 +30,8 @@ export class BusinessOwnerService {
 
     if (existing) throw new Error("Business owner account already exist");
 
+    // TODO: OTP verification
+
     const owner = await prisma.customer.create({
       data: {
         id: `dealer-${uuid()}`,
