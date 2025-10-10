@@ -2,6 +2,8 @@ import { CustomerType } from "@prisma/client";
 import prisma from "../../../lib/orm.js";
 import { v4 as uuid } from "uuid";
 import { createNotification } from "../notification.service.js";
+import { verifyOTP } from "../otp.service.js";
+import { waitForApproval } from "../../../email-messages/business-approval.js";
 
 export class BusinessOwnerService {
   async registerOwner(
@@ -30,7 +32,10 @@ export class BusinessOwnerService {
 
     if (existing) throw new Error("Business owner account already exist");
 
-    // TODO: OTP verification
+    if (!(await verifyOTP(email, otp))) {
+      console.error("Invalid OTP");
+      throw new Error("Invalid or expired OTP");
+    }
 
     const owner = await prisma.customer.create({
       data: {
@@ -51,6 +56,8 @@ export class BusinessOwnerService {
       `New ${owner.business} is waiting for your approval`,
       null
     );
+
+    await waitForApproval(email);
 
     return owner;
   }
