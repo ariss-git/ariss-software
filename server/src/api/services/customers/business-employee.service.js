@@ -3,7 +3,7 @@ import { createNotification } from "../notification.service.js";
 import { verifyOTP } from "../otp.service.js";
 
 export class BusinessEmployeeService {
-  async registerEmployee(phone, email, name, role, dealerId, otp) {
+  async registerEmployee(email, phone, name, role, dealerId, otp) {
     const existing = await prisma.customer.findUnique({
       where: {
         email,
