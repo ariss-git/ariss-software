@@ -3,8 +3,8 @@ import { BusinessEmployeeService } from "../../services/customers/business-emplo
 const businessEmployee = new BusinessEmployeeService();
 
 export const registerEmployeeController = async (req, res) => {
-  const { phone, email, name, role, dealerId, otp } = req.body;
-  const data = { phone, email, name, role, dealerId, otp };
+  const { email, phone, name, role, dealerId, otp } = req.body;
+  const data = { email, phone, name, role, dealerId, otp };
 
   if (!data) {
     return res.status(500).json({ message: "Fields are missing" });

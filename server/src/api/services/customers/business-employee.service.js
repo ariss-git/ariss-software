@@ -1,6 +1,8 @@
+import { waitForApprovalEmployee } from "../../../email-messages/business-approval.js";
 import prisma from "../../../lib/orm.js";
 import { createNotification } from "../notification.service.js";
 import { verifyOTP } from "../otp.service.js";
+import { v4 as uuid } from "uuid";
 
 export class BusinessEmployeeService {
   async registerEmployee(email, phone, name, role, dealerId, otp) {
@@ -19,6 +21,7 @@ export class BusinessEmployeeService {
 
     const employee = await prisma.customer.create({
       data: {
+        id: `${role.toLowerCase()}-${uuid()}`,
         phone,
         email,
         name,
@@ -39,9 +42,11 @@ export class BusinessEmployeeService {
 
     await createNotification(
       `${capitalized} account registration`,
-      `New ${employee.dealer_user.business} is waiting for your approval`,
+      `New ${capitalized} of ${employee.dealer_user.business} is waiting for approval`,
       null
     );
+
+    await waitForApprovalEmployee(email);
 
     return employee;
   }
