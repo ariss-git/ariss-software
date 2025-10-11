@@ -7,7 +7,6 @@ export const addProductController = async (req, res) => {
     title,
     price,
     sku,
-    visibility,
     type,
     label,
     warranty,
@@ -24,7 +23,6 @@ export const addProductController = async (req, res) => {
   const data = {
     title,
     price,
-    visibility,
     type,
     label,
     warranty,
@@ -46,7 +44,6 @@ export const addProductController = async (req, res) => {
       title,
       price,
       sku,
-      visibility,
       type,
       label,
       warranty,
