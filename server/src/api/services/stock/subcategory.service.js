@@ -40,13 +40,34 @@ export class SubCategoryService {
   }
 
   async getAllSubcategory() {
-    return await prisma.subcategory.findMany();
+    return await prisma.subcategory.findMany({
+      include: {
+        category: {
+          select: {
+            title: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: "desc",
+      },
+    });
   }
 
   async getSingleSubcategory(id) {
     const subcategory = await prisma.subcategory.findUnique({
       where: {
         id,
+      },
+      include: {
+        category: {
+          select: {
+            title: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: "desc",
       },
     });
 
