@@ -14,7 +14,11 @@ export const createNotification = async (title, description, author) => {
 
 export class NotificationService {
   async fetchAllNotifications() {
-    return await prisma.notification.findMany();
+    return await prisma.notification.findMany({
+      orderBy: {
+        created_at: "desc",
+      },
+    });
   }
 
   async fetchAllReadNotifications() {
