@@ -12,7 +12,7 @@ categoryRouter.put("/update/:id", categoryControllers.updateCategoryController);
 
 categoryRouter.delete(
   "/delete/:id/:panelId",
-  categoryControllers.updateCategoryController
+  categoryControllers.deleteCategoryController
 );
 
 export default categoryRouter;

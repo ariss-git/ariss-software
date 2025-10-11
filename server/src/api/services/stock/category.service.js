@@ -20,12 +20,19 @@ export class CategoryService {
         image,
         panel_user_id: panelUserId,
       },
+      include: {
+        panel_user: {
+          select: {
+            fullname: true,
+          },
+        },
+      },
     });
 
     createNotification(
       "Category added",
       `New ${category.title} added to the stocks`,
-      category.panel_user_id
+      category.panel_user.fullname
     );
 
     return panelUserId;
@@ -66,12 +73,19 @@ export class CategoryService {
         image,
         panel_user_id: panelUserId,
       },
+      include: {
+        panel_user: {
+          select: {
+            fullname: true,
+          },
+        },
+      },
     });
 
     createNotification(
       "Category updated",
       `${category.title} has some new changes`,
-      category.panel_user_id
+      category.panel_user.fullname
     );
 
     return category;
@@ -81,13 +95,21 @@ export class CategoryService {
     const category = await prisma.category.delete({
       where: {
         id,
+        panel_user_id: panelUserId,
+      },
+      include: {
+        panel_user: {
+          select: {
+            fullname: true,
+          },
+        },
       },
     });
 
     createNotification(
-      "Category deleted",
-      `${category.title} has been removed permanently`,
-      panelUserId
+      "Category delete",
+      `${category.title} has been deleted permanently`,
+      category.panel_user.fullname
     );
 
     return category;

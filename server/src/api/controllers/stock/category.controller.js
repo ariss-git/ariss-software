@@ -72,14 +72,15 @@ export const updateCategoryController = async (req, res) => {
 };
 
 export const deleteCategoryController = async (req, res) => {
-  const { id, panelId } = req.params;
+  const { id } = req.params;
+  const { panelId } = req.params;
 
   if (!id || !panelId) {
     return res.status(404).json({ message: "IDs not found" });
   }
 
   try {
-    const category = await categoryService.deleteCategory(id, panelId);
+    const category = await categoryService.deleteCategory(id);
     res.status(200).json({ message: "Category deleted", data: category });
   } catch (error) {
     res.status(400).json({ message: error.message });
