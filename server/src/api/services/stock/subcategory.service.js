@@ -122,6 +122,15 @@ export class SubCategoryService {
   }
 
   async deleteSubcategory(id, panelUserId) {
+    await prisma.subcategory.update({
+      where: {
+        id,
+      },
+      data: {
+        panel_user_id: panelUserId,
+      },
+    });
+
     const subcategory = await prisma.subcategory.delete({
       where: {
         id,

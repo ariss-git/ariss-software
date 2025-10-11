@@ -92,6 +92,15 @@ export class CategoryService {
   }
 
   async deleteCategory(id, panelUserId) {
+    await prisma.category.update({
+      where: {
+        id,
+      },
+      data: {
+        panel_user_id: panelUserId,
+      },
+    });
+
     const category = await prisma.category.delete({
       where: {
         id,
