@@ -104,7 +104,7 @@ export const deleteOwnerController = async (req, res) => {
   }
 
   try {
-    const owner = await businessOwnerServices.deleteOwner(email);
+    const owner = await businessOwnerServices.deleteCustomer(email);
     res.status(200).json({ message: `Business ${owner.business} deleted` });
   } catch (error) {
     res.status(400);

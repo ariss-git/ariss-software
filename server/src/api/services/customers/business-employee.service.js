@@ -1,3 +1,4 @@
+import { CustomerType } from "@prisma/client";
 import { waitForApprovalEmployee } from "../../../email-messages/business-approval.js";
 import prisma from "../../../lib/orm.js";
 import { createNotification } from "../notification.service.js";
@@ -49,5 +50,21 @@ export class BusinessEmployeeService {
     await waitForApprovalEmployee(email);
 
     return employee;
+  }
+
+  async getAllTechnicians() {
+    return await prisma.customer.findMany({
+      where: {
+        role: CustomerType.TECHNICIAN,
+      },
+    });
+  }
+
+  async getAllBackoffice() {
+    return await prisma.customer.findMany({
+      where: {
+        role: CustomerType.BACKOFFICE,
+      },
+    });
   }
 }

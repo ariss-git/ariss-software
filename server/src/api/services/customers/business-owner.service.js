@@ -101,19 +101,45 @@ export class BusinessOwnerService {
     return owner;
   }
 
-  async deleteOwner(email) {
-    const owner = await prisma.customer.delete({
+  async deleteCustomer(email) {
+    const existing = await prisma.customer.findUnique({
       where: {
         email,
-        role: CustomerType.DEALER,
+      },
+      include: {
+        dealer_user: {
+          select: {
+            business: true,
+          },
+        },
       },
     });
 
-    await createNotification(
-      "Dealer left",
-      `New ${owner.business} has deleted their account`,
-      null
-    );
+    const owner = await prisma.customer.delete({
+      where: {
+        email,
+      },
+    });
+
+    if (owner.role === "DEALER") {
+      await createNotification(
+        "Customer account deleted",
+        `Dealer of ${existing.business} has deleted their account`,
+        null
+      );
+    } else if (owner.role === "TECHNICIAN") {
+      await createNotification(
+        "Customer account deleted",
+        `Technician of ${existing.dealer_user.business} has deleted their account`,
+        null
+      );
+    } else {
+      await createNotification(
+        "Customer account deleted",
+        `Backoffice of ${existing.dealer_user.business} has deleted their account`,
+        null
+      );
+    }
 
     // TODO: Create email notification
 
