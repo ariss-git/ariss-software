@@ -35,7 +35,7 @@ export class CategoryService {
       category.panel_user.fullname
     );
 
-    return panelUserId;
+    return category;
   }
 
   async getAllCategory() {
