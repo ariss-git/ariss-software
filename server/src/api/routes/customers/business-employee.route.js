@@ -8,4 +8,13 @@ employeeRouter.post(
   employeeControllers.registerEmployeeController
 );
 
+employeeRouter.get(
+  "/technician/all",
+  employeeControllers.getAllTechniciansController
+);
+employeeRouter.get(
+  "/backoffice/all",
+  employeeControllers.getAllBackofficeController
+);
+
 export default employeeRouter;

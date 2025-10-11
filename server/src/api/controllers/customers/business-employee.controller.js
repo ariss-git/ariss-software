@@ -27,3 +27,21 @@ export const registerEmployeeController = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+export const getAllTechniciansController = async (_req, res) => {
+  try {
+    const employee = await businessEmployee.getAllTechnicians();
+    res.status(200).json({ total: employee.length, data: employee });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getAllBackofficeController = async (_req, res) => {
+  try {
+    const employee = await businessEmployee.getAllBackoffice();
+    res.status(200).json({ total: employee.length, data: employee });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
