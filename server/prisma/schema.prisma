@@ -14,6 +14,10 @@ model PanelUser {
   fullname   String
   role       PanelUserType
   created_at DateTime      @default(now())
+
+  category    Category[]
+  subcategory Subcategory[]
+  product     Product[]
 }
 
 model Notification {
@@ -44,6 +48,62 @@ model Customer {
   dealer      Customer[] @relation("DealerUser")
 }
 
+model Category {
+  id          String   @id
+  title       String   @unique
+  description String?
+  image       String
+  created_at  DateTime @default(now())
+
+  panel_user_id String?
+  panel_user    PanelUser? @relation(fields: [panel_user_id], references: [id])
+
+  subcategory Subcategory[]
+  product     Product[]
+}
+
+model Subcategory {
+  id          String   @id
+  title       String   @unique
+  description String?
+  image       String
+  created_at  DateTime @default(now())
+
+  category_id String?
+  category    Category? @relation(fields: [category_id], references: [id])
+
+  panel_user_id String?
+  panel_user    PanelUser? @relation(fields: [panel_user_id], references: [id])
+
+  product Product[]
+}
+
+model Product {
+  id          String            @id
+  title       String            @unique
+  price       Float
+  sku         String?
+  visibility  ProductVisibility @default(HIDDEN)
+  type        ProductType
+  label       ProductLabel
+  warranty    Int
+  quantity    Int
+  usps        String?
+  keywords    String[]
+  description Json
+  images      String[]
+  created_at  DateTime          @default(now())
+
+  panel_user_id String?
+  PanelUser     PanelUser? @relation(fields: [panel_user_id], references: [id])
+
+  category_id String?
+  Category    Category? @relation(fields: [category_id], references: [id])
+
+  subcategory_id String?
+  Subcategory    Subcategory? @relation(fields: [subcategory_id], references: [id])
+}
+
 model OTP {
   id         String   @id @default(nanoid())
   email      String   @unique
@@ -61,4 +121,22 @@ enum CustomerType {
 enum PanelUserType {
   ADMIN
   EMPLOYEE
+}
+
+enum ProductVisibility {
+  PUBLIC
+  HIDDEN
+}
+
+enum ProductType {
+  NORMAL
+  FIBRE
+  BUNDLE
+}
+
+enum ProductLabel {
+  NEW
+  TRENDING
+  HOT
+  SELLING
 }
