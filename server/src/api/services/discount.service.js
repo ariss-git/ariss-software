@@ -30,29 +30,29 @@ export class DiscountService {
         product_id: productId,
         panel_user_id: panelUserId,
       },
-      include: {
-        admin: {
-          select: {
-            name: true,
-          },
-        },
-        product: {
-          select: {
-            title: true,
-          },
-        },
-        panelUser: {
-          select: {
-            fullname: true,
-          },
-        },
-      },
+      // include: {
+      //   admin: {
+      //     select: {
+      //       name: true,
+      //     },
+      //   },
+      //   product: {
+      //     select: {
+      //       title: true,
+      //     },
+      //   },
+      //   panelUser: {
+      //     select: {
+      //       fullname: true,
+      //     },
+      //   },
+      // },
     });
 
     await createNotification(
       "Discount Assigned",
-      `Discount has been assigned to ${discount.admin.business} on ${discount.product.title}`,
-      discount.panelUser.fullname
+      `Discount has been assigned to business over a product. Please check the latest row in the discount table`,
+      null
     );
 
     return discount;

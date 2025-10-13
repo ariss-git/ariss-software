@@ -139,7 +139,7 @@ model Discount {
 model Return {
   id           String    @id
   product_name String?
-  model_no     String
+  model_number String    @unique
   issue        String
   images       String[]
   status       RMAStatus @default(REVIEW)
