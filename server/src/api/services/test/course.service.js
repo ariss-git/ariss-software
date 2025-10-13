@@ -50,6 +50,89 @@ export class courseService {
     });
   }
 
+  async updateCourse(id, title, content, panelUserId) {
+    const course = await prisma.course.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        content,
+        is_active: false,
+        panel_user_id: panelUserId,
+      },
+      include: {
+        panelUser: {
+          select: {
+            fullname,
+          },
+        },
+      },
+    });
+
+    await createNotification(
+      "Course Updated",
+      `Course ${course.title} has been updated, admin users are requested to review and approve`,
+      panelUserId
+    );
+
+    return course;
+  }
+
+  async approveCourse(id, panelUserId) {
+    const course = await prisma.course.update({
+      where: {
+        id,
+      },
+      data: {
+        panel_user_id: panelUserId,
+        is_active: true,
+      },
+      include: {
+        panelUser: {
+          select: {
+            fullname: true,
+          },
+        },
+      },
+    });
+
+    await createNotification(
+      "Course Approved",
+      `Course ${course.title} has been approved.`,
+      course.panelUser.fullname
+    );
+
+    return course;
+  }
+
+  async rejectCourse(id, panelUserId) {
+    const course = await prisma.course.update({
+      where: {
+        id,
+      },
+      data: {
+        panel_user_id: panelUserId,
+        is_active: false,
+      },
+      include: {
+        panelUser: {
+          select: {
+            fullname: true,
+          },
+        },
+      },
+    });
+
+    await createNotification(
+      "Course Disapproved",
+      `Course ${course.title} has been disapproved.`,
+      course.panelUser.fullname
+    );
+
+    return course;
+  }
+
   async deleteCourse(id, panelUserId) {
     await prisma.course.update({
       where: {
