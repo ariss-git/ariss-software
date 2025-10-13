@@ -149,6 +149,10 @@ model Return {
   customer    Customer? @relation(fields: [customer_id], references: [id])
 }
 
+model Course {
+  id String @id
+}
+
 enum RMAStatus {
   REVIEW
   APPROVE
