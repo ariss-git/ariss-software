@@ -25,7 +25,12 @@ export class DiscountService {
       include: {
         admin: {
           select: {
-            business: true,
+            name: true,
+          },
+        },
+        product: {
+          select: {
+            title: true,
           },
         },
         panelUser: {
@@ -38,7 +43,80 @@ export class DiscountService {
 
     await createNotification(
       "Discount Assigned",
-      `Discount has been assigned to ${discount.admin.business}`,
+      `Discount has been assigned to ${discount.admin.business} on ${discount.product.title}`,
+      discount.panelUser.fullname
+    );
+
+    return discount;
+  }
+
+  async fetchAllDiscounts() {
+    return await prisma.discount.findMany({
+      include: {
+        admin: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        product: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
+      },
+    });
+  }
+
+  async fetchSingleDiscount(id) {
+    const discount = await prisma.discount.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!discount) throw new Error("Discount do not exist");
+
+    return discount;
+  }
+
+  async deleteDiscount(id, panelUserId) {
+    await prisma.discount.update({
+      where: {
+        id,
+      },
+      data: {
+        panel_user_id: panelUserId,
+      },
+    });
+
+    const discount = await prisma.discount.delete({
+      where: {
+        id,
+      },
+      include: {
+        panelUser: {
+          select: {
+            fullname: true,
+          },
+        },
+        admin: {
+          select: {
+            name: true,
+          },
+        },
+        product: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    });
+
+    await createNotification(
+      "Discount Opted",
+      `Discount deleted for ${discount.admin.name} on ${discount.product.title}`,
       discount.panelUser.fullname
     );
 
