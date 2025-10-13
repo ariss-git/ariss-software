@@ -120,6 +120,7 @@ model OTP {
 model Discount {
   id          String       @id // Also coupon-code
   type        DiscountType
+  amount      Float
   expiry_date DateTime
   created_at  DateTime
 

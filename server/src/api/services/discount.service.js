@@ -3,7 +3,14 @@ import prisma from "../../lib/orm.js";
 import { createNotification } from "./notification.service.js";
 
 export class DiscountService {
-  async assignDiscount(type, expiryDate, dealerId, productId, panelUserId) {
+  async assignDiscount(
+    type,
+    expiryDate,
+    amount,
+    dealerId,
+    productId,
+    panelUserId
+  ) {
     const existing = await prisma.discount.findUnique({
       where: {
         admin_id: dealerId,
@@ -17,6 +24,7 @@ export class DiscountService {
       data: {
         id: `coupon-${uuid()}`,
         type,
+        amount,
         expiry_date: expiryDate,
         admin_id: dealerId,
         product_id: productId,

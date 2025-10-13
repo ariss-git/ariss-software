@@ -4,7 +4,7 @@ const discountServices = new DiscountService();
 
 export const assignDiscountController = async (req, res) => {
   const { type, expiryDate, dealerId, productId, panelUserId } = req.body;
-  const data = { type, expiryDate, dealerId, productId, panelUserId };
+  const data = { type, expiryDate, amount, dealerId, productId, panelUserId };
 
   if (!data) {
     return res.status(404).json({ message: "Required fields are missing" });
@@ -14,6 +14,7 @@ export const assignDiscountController = async (req, res) => {
     const discount = await discountServices.assignDiscount(
       type,
       expiryDate,
+      amount,
       dealerId,
       productId,
       panelUserId
