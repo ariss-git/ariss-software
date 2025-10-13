@@ -128,10 +128,10 @@ model Discount {
   created_at  DateTime
 
   admin_id String?   @unique
-  admin    Customer? @relation(fields: [admin_id], references: [id])
+  admin    Customer? @relation(fields: [admin_id], references: [id], onDelete: Cascade)
 
   product_id String?  @unique
-  product    Product? @relation(fields: [product_id], references: [id])
+  product    Product? @relation(fields: [product_id], references: [id], onUpdate: Cascade)
 
   panel_user_id String?
   panelUser     PanelUser? @relation(fields: [panel_user_id], references: [id])
@@ -147,7 +147,7 @@ model Return {
   created_at   DateTime  @default(now())
 
   customer_id String?
-  customer    Customer? @relation(fields: [customer_id], references: [id])
+  customer    Customer? @relation(fields: [customer_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Course {
@@ -155,10 +155,11 @@ model Course {
   title       String   @unique
   description String?
   content     Json
+  is_active   Boolean  @default(false)
   created_at  DateTime @default(now())
 
   panel_user_id String?
-  panelUser     PanelUser? @relation(fields: [panel_user_id], references: [id])
+  panelUser     PanelUser? @relation(fields: [panel_user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 enum RMAStatus {
