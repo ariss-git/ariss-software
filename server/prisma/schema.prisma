@@ -19,6 +19,7 @@ model PanelUser {
   subcategory Subcategory[]
   product     Product[]
   discount    Discount[]
+  course      Course[]
 }
 
 model Notification {
@@ -150,7 +151,14 @@ model Return {
 }
 
 model Course {
-  id String @id
+  id          String   @id
+  title       String   @unique
+  description String?
+  content     Json
+  created_at  DateTime @default(now())
+
+  panel_user_id String?
+  panelUser     PanelUser? @relation(fields: [panel_user_id], references: [id])
 }
 
 enum RMAStatus {
