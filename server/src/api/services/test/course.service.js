@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { createNotification } from "../notification.service.js";
 import prisma from "../../../lib/orm.js";
 
-export class courseService {
+export class CourseService {
   async createCourse(title, description, content, panelUserId) {
     const existing = await prisma.course.findUnique({
       where: {
