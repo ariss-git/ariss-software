@@ -49,6 +49,8 @@ model Customer {
   dealer      Customer[] @relation("DealerUser")
 
   discount Discount?
+
+  return Return[]
 }
 
 model Category {
@@ -132,6 +134,25 @@ model Discount {
 
   panel_user_id String?
   panelUser     PanelUser? @relation(fields: [panel_user_id], references: [id])
+}
+
+model Return {
+  id           String    @id
+  product_name String?
+  model_no     String
+  issue        String
+  images       String[]
+  status       RMAStatus @default(REVIEW)
+  created_at   DateTime  @default(now())
+
+  customer_id String?
+  customer    Customer? @relation(fields: [customer_id], references: [id])
+}
+
+enum RMAStatus {
+  REVIEW
+  APPROVE
+  REJECT
 }
 
 enum DiscountType {
