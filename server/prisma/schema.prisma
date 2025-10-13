@@ -18,6 +18,7 @@ model PanelUser {
   category    Category[]
   subcategory Subcategory[]
   product     Product[]
+  discount    Discount[]
 }
 
 model Notification {
@@ -46,6 +47,8 @@ model Customer {
   dealer_id   String?
   dealer_user Customer?  @relation("DealerUser", fields: [dealer_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   dealer      Customer[] @relation("DealerUser")
+
+  discount Discount?
 }
 
 model Category {
@@ -102,6 +105,8 @@ model Product {
 
   subcategory_id String?
   subcategory    Subcategory? @relation(fields: [subcategory_id], references: [id])
+
+  discount Discount?
 }
 
 model OTP {
@@ -110,6 +115,27 @@ model OTP {
   code       String
   expires_at DateTime
   created_at DateTime @default(now())
+}
+
+model Discount {
+  id          String       @id // Also coupon-code
+  type        DiscountType
+  expiry_date DateTime
+  created_at  DateTime
+
+  admin_id String?   @unique
+  admin    Customer? @relation(fields: [admin_id], references: [id])
+
+  product_id String?  @unique
+  product    Product? @relation(fields: [product_id], references: [id])
+
+  panel_user_id String?
+  panelUser     PanelUser? @relation(fields: [panel_user_id], references: [id])
+}
+
+enum DiscountType {
+  PERCENTAGE
+  AMOUNT
 }
 
 enum CustomerType {
