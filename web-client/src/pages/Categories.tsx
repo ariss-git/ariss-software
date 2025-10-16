@@ -1,5 +1,14 @@
+import AddCategory from "@/_components/Category/AddCategory";
 import { fetchAllCategories } from "@/api/category-api";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
@@ -16,15 +25,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { FetchCategory } from "@/types/category-types";
 import {
-  Filter,
-  MoreHorizontal,
-  Pen,
-  PlusCircle,
-  Search,
-  Trash,
-} from "lucide-react";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import type { FetchCategory } from "@/types/category-types";
+import { Filter, Info, MoreHorizontal, Pen, Search, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const Categories = () => {
@@ -74,11 +81,17 @@ const Categories = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <Search className="w-4 h-4 text-muted-foreground" />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info className="w-3 h-3 text-muted-foreground" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Total Categories: {data.length}</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         <div className="flex justify-start items-center lg:gap-x-4">
-          <Button>
-            Add Category <PlusCircle className="w-4 h-4" />
-          </Button>
+          <AddCategory />
           <Button variant={"outline"}>
             <Filter />
           </Button>
@@ -91,6 +104,7 @@ const Categories = () => {
               {heading.title}
             </TableHead>
           ))}
+          <TableHead className="text-white text-right">Actions</TableHead>
         </TableHeader>
         <TableBody>
           {paginatedData.map((category, idx) => (
@@ -108,10 +122,28 @@ const Categories = () => {
                   height={20}
                 />
               </TableCell>
-              <TableCell className="flex justify-start items-center gap-x-3">
-                <Trash className="w-4 h-4 text-red-500" />
-                <Pen className="w-4 h-4" />
-                <MoreHorizontal className="w-4 h-4" />
+              <TableCell className="flex justify-end">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <MoreHorizontal className="w-4 h-4 cursor-pointer" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-40 font-work" align="end">
+                    <DropdownMenuLabel className="font-semibold">
+                      Actions
+                    </DropdownMenuLabel>
+                    <DropdownMenuGroup className="mt-2">
+                      <DropdownMenuItem className="flex items-center justify-between">
+                        <p>Update</p>
+                        <Pen />
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="flex items-center justify-between">
+                        <p>Delete</p>
+                        <Trash />
+                      </DropdownMenuItem>
+                      <DropdownMenuItem disabled>Download</DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}
@@ -127,7 +159,6 @@ const Categories = () => {
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
-                  // disabled={currentPage === 1}
                 />
               </PaginationItem>
               {Array.from({ length: totalPages }).map((_, index) => (
@@ -145,7 +176,6 @@ const Categories = () => {
                   onClick={() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
-                  // disabled={currentPage === totalPages}
                 />
               </PaginationItem>
             </PaginationContent>
@@ -168,9 +198,6 @@ const tableHeading = [
   },
   {
     title: "Image",
-  },
-  {
-    title: "Actions",
   },
 ];
 
