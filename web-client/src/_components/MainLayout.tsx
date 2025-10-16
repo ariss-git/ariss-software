@@ -26,7 +26,7 @@ const MainLayout = () => {
         </div>
 
         {/* Scrollable Main Content */}
-        <main className="flex-1 overflow-y-auto p-4">
+        <main className="flex-1 overflow-y-auto p-4 font-work">
           <Outlet />
         </main>
       </div>
