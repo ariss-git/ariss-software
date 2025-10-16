@@ -8,8 +8,8 @@ discountRouter.post("/assign", discountControllers.assignDiscountController);
 discountRouter.get("/all", discountControllers.fetchAllDiscountsController);
 discountRouter.get("/:id", discountControllers.fetchSingleDiscountController);
 
-discountRouter.get(
-  "/:id/:panelId",
+discountRouter.delete(
+  "/delete/:id/:panelId",
   discountControllers.deleteDiscountController
 );
 

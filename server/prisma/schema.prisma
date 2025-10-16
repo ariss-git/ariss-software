@@ -122,10 +122,10 @@ model OTP {
 
 model Discount {
   id          String       @id // Also coupon-code
-  type        DiscountType
+  type        DiscountType @default(AMOUNT)
   amount      Float
   expiry_date DateTime
-  created_at  DateTime
+  created_at  DateTime     @default(now())
 
   admin_id String?   @unique
   admin    Customer? @relation(fields: [admin_id], references: [id], onDelete: Cascade)

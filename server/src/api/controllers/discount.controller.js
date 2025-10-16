@@ -3,7 +3,7 @@ import { DiscountService } from "../services/discount.service.js";
 const discountServices = new DiscountService();
 
 export const assignDiscountController = async (req, res) => {
-  const { type, expiryDate, dealerId, productId, panelUserId } = req.body;
+  const { type, expiryDate, amount, dealerId, productId, panelUserId } = req.body;
   const data = { type, expiryDate, amount, dealerId, productId, panelUserId };
 
   if (!data) {
@@ -65,3 +65,5 @@ export const deleteDiscountController = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+

@@ -22,23 +22,11 @@ export class ReturnService {
         images,
         customer_id: customerId,
       },
-      include: {
-        customer: {
-          select: {
-            business: true,
-            dealer_user: {
-              select: {
-                business: true,
-              },
-            },
-          },
-        },
-      },
     });
 
     await createNotification(
       "RMA Request",
-      `${rma.customer.business} or ${rma.customer.dealer_user.business} has sent a request to return a product`,
+      `A customer has sent a request to return a product, kindly check the RMA table.`,
       null
     );
 
@@ -47,22 +35,14 @@ export class ReturnService {
 
   async fetchAllReturns() {
     await prisma.return.findMany({
-      include: {
-        customer: {
-          select: {
-            business: true,
-            dealer_user: {
-              select: {
-                business: true,
-              },
-            },
-          },
-        },
-      },
       orderBy: {
         created_at: "desc",
       },
     });
+  }
+
+  async getAllReturn() {
+    await prisma.return.findMany();
   }
 
   async approveReturnRequest(id) {

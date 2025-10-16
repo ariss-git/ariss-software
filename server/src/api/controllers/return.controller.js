@@ -4,7 +4,7 @@ const returnServices = new ReturnService();
 
 export const createReturnRequestController = async (req, res) => {
   const { productName, modelNo, issue, images, customerId } = req.body;
-  const data = { productName, modelNo, issue, images, customerId };
+  const data = { modelNo, issue, images, customerId };
 
   if (!data) {
     return res.status(404).json({ message: "All fields are required" });
@@ -27,6 +27,15 @@ export const createReturnRequestController = async (req, res) => {
 export const fetchAllReturnsController = async (_req, res) => {
   try {
     const rma = await returnServices.fetchAllReturns();
+    res.status(200).json({ data: rma });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getAllReturnController = async (_req, res) => {
+  try {
+    const rma = await returnServices.getAllReturn();
     res.status(200).json({ data: rma });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -6,6 +6,7 @@ const returnRouter = Router();
 returnRouter.post("/create", returnControllers.createReturnRequestController);
 
 returnRouter.get("/all", returnControllers.fetchAllReturnsController);
+returnRouter.get("/", returnControllers.getAllReturnController);
 
 returnRouter.patch(
   "/approve/:id",
